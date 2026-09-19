@@ -1,6 +1,6 @@
 ---
-title: "The Second Sign-In Your MCP Tool Didn't Expect"
-subtitle: "What happens when a tool call needs an identity your MCP server never asked for"
+title: "MCP Elicitation: The Second Sign-In Problem"
+subtitle: ""
 slug: "mcp-elicitation"
 tags: ["mcp", "oauth", "authentication", "ai-agents"]
 hashnode_url: https://hashnode.com/draft/6a90c4e2808ee0ab726f15b2
@@ -18,7 +18,7 @@ The setup: my MCP server sits behind Google for sign-in, so getting past the fro
 
 This isn't a corner case you hit once during setup. It's structural. Any MCP server that's a thin wrapper over a real backend will have tools that reach past the front-door identity into some other system with its own authorization rules. The 401 challenge at the server boundary tells you nothing about what happens three tool calls later.
 
-![Google gets you past the MCP server's front door; Notion has no idea who you are yet](images/identity-boundaries.png)
+![Google gets you past the MCP server's front door; Notion has no idea who you are yet](https://raw.githubusercontent.com/SiddhanthNB/under-the-abstraction/main/articles/drafts/mcp-elicitation/images/identity-boundaries.png)
 
 Solid line: the boundary the front door actually solves. Dashed line: the one it doesn't, and never claimed to.
 
@@ -47,7 +47,7 @@ The client's response just means the user agreed to open that link, not that sig
 
 So the fix is exactly what the spec describes. The tool call fails for lack of a credential from the second identity provider, the server issues an elicitation request with a sign-in URL, the client shows it to me, I authorize, the tool call gets retried. On paper this is a solved problem.
 
-![The full elicitation round trip: tool call fails, server asks for a sign-in URL, user authorizes with the second IdP, tool call retries](images/elicitation-sequence.png)
+![The full elicitation round trip: tool call fails, server asks for a sign-in URL, user authorizes with the second IdP, tool call retries](https://raw.githubusercontent.com/SiddhanthNB/under-the-abstraction/main/articles/drafts/mcp-elicitation/images/elicitation-sequence.png)
 
 Worth being precise about that last retry step: the server isn't polling anything, and it doesn't push a notification back either. Once the user finishes signing in, nothing happens on its own, the user has to go try the tool call again themselves. Each retried tool call is then a fresh, stateless check: the server looks at whatever it has stored and either finds a usable token now or it doesn't. That's a deliberate choice, consistent with the broader move toward a stateless MCP spec: no session state to keep, no open connection to hold while waiting on an OAuth flow that might take a few seconds or might never finish at all, and any retry can land on any server instance behind a load balancer.
 
@@ -59,7 +59,7 @@ First, client support is uneven. URL mode elicitation is recent enough that plen
 
 Second, and this is the one that actually bit me: elicitation assumes the host has a face. The spec's own architecture draws a line between host, client, and server, and it's the host that owns the UI. That's a fine assumption for a desktop app or a chat interface. It falls apart the moment your MCP host is embedded in something backend, a queued job, an orchestration service, a bot with no human watching in real time. There's no browser to open. The elicitation request has nowhere to go.
 
-![User talks to the frontend, the frontend talks to a backend that embeds the MCP host and client, and the MCP server sits right next to that backend](images/headless-host.png)
+![User talks to the frontend, the frontend talks to a backend that embeds the MCP host and client, and the MCP server sits right next to that backend](https://raw.githubusercontent.com/SiddhanthNB/under-the-abstraction/main/articles/drafts/mcp-elicitation/images/headless-host.png)
 
 The backend is the MCP host, the MCP server sits right next to it, and neither of them has a face. The elicitation request lands there and dead-ends, it has to travel all the way back out through the frontend before the user ever sees it. The spec describes the ideal case, a host with a face. Real systems are often messier than that.
 
