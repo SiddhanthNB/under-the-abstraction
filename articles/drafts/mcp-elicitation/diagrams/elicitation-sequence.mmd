@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant User
+    participant Client as MCP Client
+    participant Server as MCP Server
+    participant Provider as Second IdP
+
+    Client->>Server: tools/call
+    Note over Server: no token for this user at the second IdP
+    Server-->>Client: elicitation/create (mode: url)
+    Client->>User: show URL, ask consent
+    User-->>Client: consent
+    Client->>Provider: open URL (browser)
+    User->>Provider: sign in, authorize
+    Provider-->>Server: redirect with code
+    Note over Server: exchange code, bind token to user
+    Client->>Server: tools/call (retry)
+    Server->>Provider: call API with token
+    Server-->>Client: result

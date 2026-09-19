@@ -1,0 +1,4 @@
+flowchart LR
+    User -->|sign in| Google
+    Google -->|front-door token| Server[MCP Server]
+    Server -.->|tool call, no Notion credential| Notion
