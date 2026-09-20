@@ -5,6 +5,7 @@ slug: "mcp-elicitation"
 tags: ["mcp", "oauth", "authentication", "ai-agents"]
 hashnode_url: https://hashnode.com/draft/6a90c4e2808ee0ab726f15b2
 ---
+<!-- copy from here -->
 
 A few weeks into building an MCP server, I thought the identity problem was solved. I sign in through Google, the MCP server validates the token at the door, every tool call after that runs as me. Clean.
 

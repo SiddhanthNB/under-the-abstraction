@@ -2,7 +2,7 @@
 
 ## Inbox
 
-- 
+- MCP server testing
 
 ## Developing
 
