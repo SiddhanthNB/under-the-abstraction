@@ -1,0 +1,12 @@
+# Content License
+
+The written content of this repository, articles under `articles/` (both `drafts/` and `archive/`), along with their images and diagrams, is licensed under the:
+
+**Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)**
+
+This means others may read, share, and link to this content, with attribution, but may not modify, adapt, or use it commercially without explicit permission from the author.
+
+- License deed (summary): https://creativecommons.org/licenses/by-nc-nd/4.0/
+- Full legal text: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+Code snippets embedded within articles, and any files under `templates/`, are licensed separately under the MIT License, see `LICENSE-MIT`.
